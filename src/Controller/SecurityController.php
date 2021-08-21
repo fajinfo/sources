@@ -32,7 +32,7 @@ class SecurityController extends AbstractController
 
     /**
      * @throws \Exception
-     * @Route("/logout", name="logout", methods={"GET"}
+     * @Route("/logout", name="logout", methods={"GET"})
      */
     public function logout(): void {
         throw new \Exception('This message should not appear');
