@@ -31,6 +31,6 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linktoDashboard('Tableau de bord', 'fa fa-home');
         yield MenuItem::section('Administration');
-        yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class)->setPermission('ROLE_USER');
+        yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class)->setPermission('ROLE_ADMIN');
     }
 }
