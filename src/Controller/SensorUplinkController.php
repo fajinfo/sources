@@ -46,12 +46,14 @@ class SensorUplinkController extends AbstractController
                 $em->persist($sensor);
                 $em->flush();
 
+                $logger->info('Tracker information received');
                 return new JsonResponse([], Response::HTTP_OK);
 
             }
             $logger->error('Tracker information received without the EUI Registred ', ['EUI_Received' => bin2hex(base64_decode($data['devEUI']))]);
             return new JsonResponse(['error' => 'Tracker not registered'], Response::HTTP_NOT_FOUND);
         }
+        $logger->error('Tracker information received without the correct Autorization Header ', ['Authorization' => $request->headers->get('Authorization')]);
         return new JsonResponse(['error' => 'Not Valid Authorization Key'], Response::HTTP_UNAUTHORIZED);
     }
 }
