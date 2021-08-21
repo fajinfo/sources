@@ -29,4 +29,12 @@ class SecurityController extends AbstractController
             'sign_in_label' => 'Connexion',
         ]);
     }
+
+    /**
+     * @throws \Exception
+     * @Route("/logout", name="logout", methods={"GET"}
+     */
+    public function logout(): void {
+        throw new \Exception('This message should not appear');
+    }
 }
