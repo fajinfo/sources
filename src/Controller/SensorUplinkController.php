@@ -38,8 +38,12 @@ class SensorUplinkController extends AbstractController
                     $uplink->setWaterFlowRate('FlowRate');
                 }
 
+                $sensor->setLastSeen($uplink->getDate())
+                    ->setLastBattery($uplink->getBattery());
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($uplink);
+                $em->persist($sensor);
                 $em->flush();
 
                 return new JsonResponse([], Response::HTTP_OK);
