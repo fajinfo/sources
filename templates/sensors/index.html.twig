@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sensors index{% endblock %}
+
+{% block body %}
+    <h1>Sensors index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DevEui</th>
+                <th>LastSeen</th>
+                <th>LastBattery</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for sensor in sensors %}
+            <tr>
+                <td>{{ sensor.id }}</td>
+                <td>{{ sensor.devEui }}</td>
+                <td>{{ sensor.lastSeen ? sensor.lastSeen|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ sensor.lastBattery }}</td>
+                <td>
+                    <a href="{{ path('sensors_show', {'id': sensor.id}) }}">show</a>
+                    <a href="{{ path('sensors_edit', {'id': sensor.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('sensors_new') }}">Create new</a>
+{% endblock %}
