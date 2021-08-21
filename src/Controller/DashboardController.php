@@ -21,12 +21,15 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Suivi des sources - Fajinfo Sàrl');
+            ->setTitle('Suivi des sources');
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linktoDashboard('Tableau de bord', 'fa fa-home');
+        yield MenuItem::section('Administration');
+
+        yield MenuItem::linkToLogout('Déconnexion', 'fa fa-exit');
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
