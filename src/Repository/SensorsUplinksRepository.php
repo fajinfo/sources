@@ -34,7 +34,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('u');
 
         $qb->leftJoin('u.sensor', 's')
-            ->select('u', 'MAX(u.waterFlowRate) as max_flow, MIN(u.waterFlowRate) as min_flow, AVG(u.waterFlowRate) as avg_flow')
+            ->select('MAX(u.waterFlowRate) AS max_flow, MIN(u.waterFlowRate) AS min_flow, AVG(u.waterFlowRate) AS avg_flow')
             ->andWhere('s.source = :se')
             ->setParameter('se', $source)
             ->andWhere('u.date BETWEEN :from AND :to')
