@@ -4,7 +4,7 @@
 {% if 'toMany' == field.customOptions.get('associationType') %}
     <table>
         <td>Id</td>
-        {% for field.value in row %}
+        {% for row in field.value %}
         <tr>{{ row }}</tr>
         {% endfor %}
     </table>
