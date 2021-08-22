@@ -35,7 +35,7 @@ class SourcesCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('name'),
-            AssociationField::new('sensor')->setPermission('ROLE_ADMIN'),
+            AssociationField::new('sensor')->setPermission('SOURCES_ADMIN'),
             AssociationField::new('AdminUser')->setPermission('ROLE_ADMIN'),
             AssociationField::new('ViewUser')->setPermission('ROLE_ADMIN'),
             AssociationField::new('hourlyFlow')->onlyOnDetail(),
