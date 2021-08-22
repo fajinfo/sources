@@ -40,7 +40,7 @@ class SourcesCrudController extends AbstractCrudController
             AssociationField::new('ViewUser')->setPermission('ROLE_ADMIN'),
             AssociationField::new('hourlyFlow')->onlyOnDetail(),
             AssociationField::new('dailyFlow')->onlyOnDetail(),
-            DateTimeField::new('sensor.lastSeen')->hideOnForm(),
+            DateTimeField::new('sensor.lastSeen')->hideOnForm()->setTemplatePath('CustomFields/date_since.html.twig'),
         ];
     }
 }
