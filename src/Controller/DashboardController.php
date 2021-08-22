@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Sensors;
 use App\Entity\User;
 use App\Entity\Sources;
+use App\Repository\SourcesRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -18,9 +19,10 @@ class DashboardController extends AbstractDashboardController
      * @Route("/", name="dashboard")
      * @Security("is_granted('ROLE_USER')")
      */
-    public function index(): Response
+    public function index(SourcesRepository $sourcesRepository): Response
     {
-        return $this->render('Dashboard/dashboard.html.twig');
+        $sources = $sourcesRepository->findAll();
+        return $this->render('Dashboard/dashboard.html.twig', array('sources' => $sources));
     }
 
     public function configureDashboard(): Dashboard
