@@ -43,9 +43,9 @@ class SensorsUplinksRepository extends ServiceEntityRepository
             ->setParameter('from', $dateTime)
             ->setParameter('to', $dateFin);
 
-        print_r($qb->getQuery()->getSQL());
-
         $result = $qb->getQuery()->getResult();
+
+        print_r($result);
 
         $hourlyFlow = new HourlyFlow();
         $hourlyFlow->setDate($dateTime);
