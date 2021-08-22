@@ -66,7 +66,7 @@ class HourlyFlowRepository extends ServiceEntityRepository
         $dateDebut = clone $dateTime;
         $dateDebut->setTime(0,0,0);
         $dateFin = clone $dateTime;
-        $dateFin->modify('last day of month');
+        $dateFin->modify('last day of current month');
         $dateFin->setTime(23,59,59);
         $qb = $this->createQueryBuilder('u')
             ->delete(HourlyFlow::class, 'hf')
