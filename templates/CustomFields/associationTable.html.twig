@@ -12,9 +12,9 @@
         {% for row in field.value %}
         <tr>
             <td>{{ row.id }}</td>
-            <td>{{ row.date|format('d/m/Y H:i') }}</td>
-            <td>{{ row.battery }} Volts</td>
-            <td>{{ row.waterFlowRate }} lt/min</td>
+            <td>{{ row.date|date('d/m/Y H:i') }}</td>
+            <td>{% if row.battery %}{{ row.battery }} Volts{% else %}N/a{% endif %}</td>
+            <td>{% if row.waterFlowRate %}{{ row.waterFlowRate }} lt/min{% else %}N/a{% endif %}</td>
         </tr>
         {% endfor %}
     </table>
