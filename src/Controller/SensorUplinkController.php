@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Sensors;
+use App\Entity\Sources;
 use App\Entity\SensorsUplinks;
 use App\Repository\HourlyFlowRepository;
 use App\Repository\SensorsRepository;
@@ -75,30 +76,30 @@ class SensorUplinkController extends AbstractController
         /**
          * On Archive les données du même jour il y a un mois dans la base "HourlyFlow"
          */
-        foreach($sources as $source){
-            $working_date = new \DateTime();
-            $working_date->setTime('0', '0', '0');
-            $working_date->modify('-1 month');
-            $hourlyFlow = array();
-            for($i=0; $i <24; $i++){
-                $hourlyFlow[$i] = $sensorsUplinksRepository->getForArchive($working_date, $source);
-                if($hourlyFlow[$i] != null){
-                    $em->persist($hourlyFlow[$i]);
-                }
-                $working_date->modify('+1 hour');
-            }
-            $em->flush();
-        }
-        $working_date->modify('-24 hour');
-        $sensorsUplinksRepository->removeArchivedDay($working_date);
-        $em->flush();
+        $working_date = new \DateTime();
+        $working_date->setTime('0', '0', '0');
+        $working_date->modify('-1 month');
+        $this->archiveHourlyStats($working_date, $sources, $sensorsUplinksRepository, $em);
 
         /**
-         * Si nous sommes le premier jour du mois, on archive le même mois de l'an dernier dans la base "DailyFlow"
+         * Si nous sommes le premier jour du mois, on archive les jours manquants de 28 à 31 puis on archive le même mois de l'an dernier dans la base "DailyFlow"
          */
-        if($working_date->format('d') == 22) {
+        $working_date = new \DateTime();
+        if($working_date->format('d') == 22 /* TODO : Set this value to 1*/) {
+            $working_date->modify('-1 day');
+            $lastMonthNbDay = intval($working_date->format('t'))/
+            $working_date->modify('-1 month');
+            $workingMonthNbDay = intval($working_date->format('t'));
+            $working_date->modify('+1 month');
 
-            // TODO: Add System to work from 28 to 31 day with the code above.
+            if($workingMonthNbDay > $lastMonthNbDay){
+                for($i = $workingMonthNbDay + 1; $i <=$lastMonthNbDay; $i++ ){
+                    $date = new \DateTime($working_date->format('Y-m-').$i.' 00:00:00');
+                    $this->archiveHourlyStats($date, $sources, $sensorsUplinksRepository, $em);
+                }
+            }
+
+
             foreach ($sources as $source) {
                 $working_date = new \DateTime();
                 $working_date->modify('first day of -13 month');
@@ -119,5 +120,31 @@ class SensorUplinkController extends AbstractController
 
 
         return new Response('Success');
+    }
+
+    /**
+     * @param \DateTime $date
+     * @param Sources[] $sources
+     * @param SensorsUplinksRepository $sensorsUplinksRepository
+     * @param EntityManagerInterface $em
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    protected function archiveHourlyStats($date, $sources, SensorsUplinksRepository $sensorsUplinksRepository, EntityManagerInterface $em){
+        foreach($sources as $source){
+            $working_date = clone $date;
+            $hourlyFlow = array();
+            for($i=0; $i <24; $i++){
+                $hourlyFlow[$i] = $sensorsUplinksRepository->getForArchive($working_date, $source);
+                if($hourlyFlow[$i] != null){
+                    $em->persist($hourlyFlow[$i]);
+                }
+                $working_date->modify('+1 hour');
+            }
+            $em->flush();
+        }
+        $working_date->modify('-24 hour');
+        $sensorsUplinksRepository->removeArchivedDay($working_date);
+        $em->flush();
     }
 }
