@@ -6,6 +6,7 @@ use App\Entity\Sensors;
 use App\Entity\User;
 use App\Entity\Sources;
 use App\Repository\SourcesRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -39,6 +40,11 @@ class DashboardController extends AbstractDashboardController
     {
         return Dashboard::new()
             ->setTitle('Suivi des sources');
+    }
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets->addJsFile('assets/chart.js.min');
     }
 
     public function configureMenuItems(): iterable
