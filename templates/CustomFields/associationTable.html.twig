@@ -3,9 +3,13 @@
 {# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
 {% if 'toMany' == field.customOptions.get('associationType') %}
     <table>
-        <td>Id</td>
+        <tr>
+            <th>Id</th>
+        </tr>
         {% for row in field.value %}
-        <tr>{{ row }}</tr>
+        <tr>
+            <td>{{ row.__toString() }}</td>
+        </tr>
         {% endfor %}
     </table>
 {% else %}
