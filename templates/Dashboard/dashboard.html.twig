@@ -6,6 +6,14 @@
     {% for source in sources %}
         <h1>{{ source }}</h1>
         <div class="col-md-6 col-sm-12">
+            <div class="feature col">
+                <div class="feature-icon bg-primary bg-gradient">
+                    <i class="fa fa-hourglass"></i>
+                </div>
+                <h2>{% trans %}Last Seen{% endtrans %}</h2>
+                <p>{{ source.sensor.first.lastSeen|ago }}</p>
+        </div>
+        <div class="col-md-6 col-sm-12">
             <h3>{% trans %}Current Month Data{% endtrans %}</h3>
             <canvas id="chart{{ source.id }}month" width="400" height="400"></canvas>
                 <script type="application/javascript">
