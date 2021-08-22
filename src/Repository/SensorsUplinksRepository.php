@@ -41,7 +41,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
             ->setParameter('from', $dateTime)
             ->setParameter('to', $dateTime->modify('+1 hour'));
 
-        print_r($qb->getDQL());
+        print_r($qb->getQuery()->getSQL());
 
         $result = $qb->getQuery()->getSingleScalarResult();
 
