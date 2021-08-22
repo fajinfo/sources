@@ -74,11 +74,10 @@ class SensorUplinkController extends AbstractController
         /**
          * On Archive les données du même jour il y a un mois dans la base "HourlyFlow"
          */
-        $working_date = new \DateTime();
-        $working_date->setTime('0', '0', '0');
-        $working_date->modify('-1 month');
-
         foreach($sources as $source){
+            $working_date = new \DateTime();
+            $working_date->setTime('0', '0', '0');
+            $working_date->modify('-1 month');
             $hourlyFlow = array();
             for($i=0; $i <24; $i++){
                 $hourlyFlow[$i] = $sensorsUplinksRepository->getForArchive($working_date, $source);
@@ -89,7 +88,10 @@ class SensorUplinkController extends AbstractController
             }
             $em->flush();
         }
+        $working_date->modify('-24 hour');
         $sensorsUplinksRepository->removeArchivedDay($working_date);
         $em->flush();
+
+        return new Response('Success');
     }
 }
