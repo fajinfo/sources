@@ -56,4 +56,8 @@ class SensorUplinkController extends AbstractController
         $logger->error('Tracker information received without the correct Autorization Header ', ['Authorization' => $request->headers->get('Authorization')]);
         return new JsonResponse(['error' => 'Not Valid Authorization Key'], Response::HTTP_UNAUTHORIZED);
     }
+
+    public function archive(){
+
+    }
 }
