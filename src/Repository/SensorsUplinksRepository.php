@@ -53,7 +53,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
             $hourlyFlow->setMediumFlowrate($result[0]['avg_flow']);
             $hourlyFlow->setMinimumFlowrate($result[0]['min_flow']);
             $hourlyFlow->setSource($source);
-            return new HourlyFlow();
+            return $hourlyFlow;
         }
         return null;
     }
