@@ -32,6 +32,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
      */
     public function getForArchive(DateTime $dateTime, Sources $source){
         $qb = $this->createQueryBuilder('u');
+        $dateDebut = clone $dateTime;
         $dateFin = clone $dateTime;
         $dateFin->modify('+59 minutes');
 
