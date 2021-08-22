@@ -26,7 +26,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
     /**
      * @param DateTime $dateTime
      * @param Sources $source
-     * @return HourlyFlow
+     * @return HourlyFlow|null
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -43,16 +43,18 @@ class SensorsUplinksRepository extends ServiceEntityRepository
             ->setParameter('from', $dateTime)
             ->setParameter('to', $dateFin);
 
-        $result = $qb->getQuery()->getSingleScalarResult();
-        print_r($result);
+        $result = $qb->getQuery()->getScalarResult();
 
-        $hourlyFlow = new HourlyFlow();
-        $hourlyFlow->setDate($dateTime);
-        $hourlyFlow->setMaximumFlowrate($result['max_flow']);
-        $hourlyFlow->setMediumFlowrate($result['avg_flow']);
-        $hourlyFlow->setMinimumFlowrate($result['min_flow']);
-        $hourlyFlow->setSource($source);
-        return new HourlyFlow();
+        if($result[0]['avg_flow'] != null){
+            $hourlyFlow = new HourlyFlow();
+            $hourlyFlow->setDate($dateTime);
+            $hourlyFlow->setMaximumFlowrate($result[0]['max_flow']);
+            $hourlyFlow->setMediumFlowrate($result[0]['avg_flow']);
+            $hourlyFlow->setMinimumFlowrate($result[0]['min_flow']);
+            $hourlyFlow->setSource($source);
+            return new HourlyFlow();
+        }
+        return null;
     }
 
     /**

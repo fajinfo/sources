@@ -82,7 +82,9 @@ class SensorUplinkController extends AbstractController
             $hourlyFlow = array();
             for($i=0; $i <24; $i++){
                 $hourlyFlow[$i] = $sensorsUplinksRepository->getForArchive($working_date, $source);
-                $em->persist($hourlyFlow[$i]);
+                if($hourlyFlow[$i] != null){
+                    $em->persist($hourlyFlow[$i]);
+                }
                 $working_date->modify('+1 hour');
             }
             $sensorsUplinksRepository->removeArchivedDay($working_date, $source);
