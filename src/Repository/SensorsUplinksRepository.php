@@ -68,7 +68,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
         $dateDebut->setTime(0,0,0);
         $dateFin = clone $dateTime;
         $dateFin->setTime(23, 59, 59);
-        $qb = $this->createQueryBuilder()
+        $qb = $this->createQueryBuilder('u')
             ->delete('u')
             ->leftJoin('u.sensor', 's')
             ->andWhere('s.source = :source')
