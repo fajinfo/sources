@@ -7,7 +7,6 @@ use App\Entity\Sources;
 use \DateTime;
 use App\Entity\SensorsUplinks;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -75,33 +74,4 @@ class SensorsUplinksRepository extends ServiceEntityRepository
         ;
         return $qb->getQuery()->execute();
     }
-
-    // /**
-    //  * @return SensorsUplinks[] Returns an array of SensorsUplinks objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?SensorsUplinks
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

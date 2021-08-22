@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\DailyFlow;
 use App\Entity\HourlyFlow;
+use App\Entity\Sources;
+use \DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +22,58 @@ class HourlyFlowRepository extends ServiceEntityRepository
         parent::__construct($registry, HourlyFlow::class);
     }
 
-    // /**
-    //  * @return HourlyFlow[] Returns an array of HourlyFlow objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('h.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    /**
+     * @param DateTime $dateTime
+     * @param Sources $source
+     * @return DailyFlow|null
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getForArchive(DateTime $dateTime, Sources $source){
+        $qb = $this->createQueryBuilder('hf');
 
-    /*
-    public function findOneBySomeField($value): ?HourlyFlow
-    {
-        return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $dateDebut = clone $dateTime;
+        $dateDebut->setTime(0,0,0);
+        $dateFin = clone $dateTime;
+        $dateFin->setTime(23, 59, 59);
+
+        $qb->select('MAX(hf.maximumFlowrate) AS max_flow, MIN(hf.minimumFlowrate) AS min_flow, AVG(hf.mediumFlowrate) AS avg_flow')
+            ->andWhere('hf.source = :se')
+            ->setParameter('se', $source)
+            ->andWhere('u.date BETWEEN :from AND :to')
+            ->setParameter('from', $dateDebut)
+            ->setParameter('to', $dateFin);
+
+        $result = $qb->getQuery()->getScalarResult();
+
+        if($result[0]['avg_flow'] != null){
+            $dailyFlow = new DailyFlow();
+            $dailyFlow->setDate($dateDebut);
+            $dailyFlow->setMaximumFlowrate($result[0]['max_flow']);
+            $dailyFlow->setMediumFlowrate($result[0]['avg_flow']);
+            $dailyFlow->setMinimumFlowrate($result[0]['min_flow']);
+            $dailyFlow->setSource($source);
+            return $dailyFlow;
+        }
+        return null;
     }
-    */
+
+    /**
+     * @param DateTime $dateTime
+     * @return int|mixed|string
+     */
+    public function removeArchivedMonth(DateTime $dateTime){
+        $dateDebut = clone $dateTime;
+        $dateDebut->setTime(0,0,0);
+        $dateFin = clone $dateTime;
+        $dateFin->modify('last day of month');
+        $dateFin->setTime(23,59,59);
+        $qb = $this->createQueryBuilder('u')
+            ->delete(HourlyFlow::class, 'hf')
+            ->andWhere('hf.date BETWEEN :from and :to')
+            ->setParameter('from', $dateDebut)
+            ->setParameter('to', $dateFin)
+        ;
+        return $qb->getQuery()->execute();
+    }
 }

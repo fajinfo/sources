@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Sensors;
 use App\Entity\SensorsUplinks;
+use App\Repository\HourlyFlowRepository;
 use App\Repository\SensorsRepository;
 use App\Repository\SensorsUplinksRepository;
 use App\Repository\SourcesRepository;
@@ -68,7 +69,7 @@ class SensorUplinkController extends AbstractController
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @Route("api/archive/uplink", name="api_archive_uplink")
      */
-    public function archive(SourcesRepository $sourcesRepository, SensorsUplinksRepository $sensorsUplinksRepository, EntityManagerInterface $em){
+    public function archive(SourcesRepository $sourcesRepository, SensorsUplinksRepository $sensorsUplinksRepository, HourlyFlowRepository $hourlyFlowRepository, EntityManagerInterface $em){
         $sources = $sourcesRepository->findAll();
 
         /**
@@ -91,6 +92,31 @@ class SensorUplinkController extends AbstractController
         $working_date->modify('-24 hour');
         $sensorsUplinksRepository->removeArchivedDay($working_date);
         $em->flush();
+
+        /**
+         * Si nous sommes le premier jour du mois, on archive le même mois de l'an dernier dans la base "DailyFlow"
+         */
+        if($working_date->format('d') == 1) {
+
+            // TODO: Add System to work from 28 to 31 day with the code above.
+            foreach ($sources as $source) {
+                $working_date = new \DateTime();
+                $working_date->modify('-1 year');
+                $dailyFlow = array();
+                for ($i = 0; $i < $working_date->format('t'); $i++) {
+                    $dailyFlow[$i] = $hourlyFlowRepository->getForArchive($working_date, $source);
+                    if ($dailyFlow[$i] != null) {
+                        $em->persist($dailyFlow[$i]);
+                    }
+                    $working_date->modify('+1 day');
+                }
+                $em->flush();
+            }
+            $working_date->modify('first day of last month');
+            $hourlyFlowRepository->removeArchivedMonth($working_date);
+            $em->flush();
+        }
+
 
         return new Response('Success');
     }
