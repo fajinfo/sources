@@ -32,6 +32,8 @@ class SensorsUplinksRepository extends ServiceEntityRepository
      */
     public function getForArchive(DateTime $dateTime, Sources $source){
         $qb = $this->createQueryBuilder('u');
+        $dateFin = $dateTime;
+        $dateFin->modify('+59 minutes');
 
         $qb->leftJoin('u.sensor', 's')
             ->select('MAX(u.waterFlowRate) AS max_flow, MIN(u.waterFlowRate) AS min_flow, AVG(u.waterFlowRate) AS avg_flow')
@@ -39,7 +41,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
             ->setParameter('se', $source)
             ->andWhere('u.date BETWEEN :from AND :to')
             ->setParameter('from', $dateTime)
-            ->setParameter('to', $dateTime->modify('+1 hour'));
+            ->setParameter('to', $dateFin);
 
         print_r($qb->getQuery()->getSQL());
 
@@ -60,6 +62,8 @@ class SensorsUplinksRepository extends ServiceEntityRepository
      * @return int|mixed|string
      */
     public function removeArchivedDay(DateTime $dateTime, Sources $source){
+        $dateFin = $dateTime;
+        $dateFin->setTime(23, 59, 59);
         $qb = $this->createQueryBuilder('u')
             ->delete('u')
             ->leftJoin('u.sensor', 's')
@@ -67,7 +71,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
             ->setParameter('source', $source)
             ->andWhere('u.date BETWEEN :from and :to')
             ->setParameter('from', $dateTime->setTime(0, 0, 0))
-            ->setParameter('to', $dateTime->setTime(23, 59, 59))
+            ->setParameter('to', $dateFin)
         ;
         return $qb->getQuery()->execute();
     }
