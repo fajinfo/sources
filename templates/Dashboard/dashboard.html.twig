@@ -7,9 +7,9 @@
     <div class="col-md-6 col-sm-12">
         <h2>{{ source }}</h2>
         <h3>{% trans %}Current Month Data{% endtrans %}</h3>
-        <canvas id="{{ source.id }}_month" width="400" height="400"></canvas>
+        <canvas id="chart{{ source.id }}month" width="400" height="400"></canvas>
             <script type="application/javascript">
-                var ctx = document.getElementById('{{ source.id }}_month');
+                var ctx = document.getElementById('chart{{ source.id }}month');
                 var {{ source.id }}_month = new Chart(ctx, {
                     type: 'bar',
                     data: {
