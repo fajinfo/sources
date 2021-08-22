@@ -80,16 +80,20 @@ class Sources
         return $this;
     }
 
-    public function getSensor(): ?Sensors
+    /**
+     * @return mixed
+     */
+    public function getSensor()
     {
         return $this->sensor;
     }
 
-    public function setSensor(?Sensors $sensor): self
+    /**
+     * @param mixed $sensor
+     */
+    public function setSensor($sensor): void
     {
         $this->sensor = $sensor;
-
-        return $this;
     }
 
     /**

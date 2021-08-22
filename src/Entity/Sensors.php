@@ -20,6 +20,11 @@ class Sensors
     private $id;
 
     /**
+     * @ORM\OneToMany(targetEntity=Sources::class, mappedBy="sensor", orphanRemoval=true)
+     */
+    private $source;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $devEui;
@@ -51,6 +56,14 @@ class Sensors
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 
     public function getDevEui(): ?string
