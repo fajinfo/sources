@@ -44,6 +44,10 @@ class Sensors
           $this->uplinks = new ArrayCollection();
     }
 
+    public function __toString(){
+        return $this->devEui;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

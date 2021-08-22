@@ -38,6 +38,11 @@ class SensorsUplinks
      */
     private $waterFlowRate;
 
+    public function __toString()
+    {
+        return $this->getDate()->format('d/m/Y H:i');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
