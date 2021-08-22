@@ -96,7 +96,7 @@ class SensorUplinkController extends AbstractController
         /**
          * Si nous sommes le premier jour du mois, on archive le même mois de l'an dernier dans la base "DailyFlow"
          */
-        if($working_date->format('d') == 1) {
+        if($working_date->format('d') == 22) {
 
             // TODO: Add System to work from 28 to 31 day with the code above.
             foreach ($sources as $source) {
