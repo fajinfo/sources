@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class SourcesCrudController extends AbstractCrudController
@@ -41,6 +42,7 @@ class SourcesCrudController extends AbstractCrudController
             AssociationField::new('hourlyFlow')->onlyOnDetail(),
             AssociationField::new('dailyFlow')->onlyOnDetail(),
             DateTimeField::new('sensor.lastSeen')->hideOnForm()->setTemplatePath('CustomFields/date_since.html.twig'),
+            PercentField::new('sensor.lastBatteryPercent')->hideOnForm()
         ];
     }
 }
