@@ -5,7 +5,7 @@
 <div class="row">
     {% for source in sources %}
         <h1>{{ source }}</h1>
-        <div class="col-md-4 col-sm 12">
+        <div class="col-md-6 col-sm-12">
             <h3>{% trans %}Current Month Data{% endtrans %}</h3>
             <canvas id="chart{{ source.id }}month" width="400" height="400"></canvas>
                 <script type="application/javascript">
@@ -30,7 +30,7 @@
                     })
                 </script>
         </div>
-        <div class="col-md-4 col-sm 12">
+        <div class="col-md-6 col-sm-12">
             <h3>{% trans %}Current Year Data{% endtrans %}</h3>
             <canvas id="chart{{ source.id }}year" width="400" height="400"></canvas>
             <script type="application/javascript">
@@ -60,7 +60,7 @@
                 })
             </script>
         </div>
-        <div class="col-md-4 col-sm-12">
+        <div class="col-md-6 col-sm-12">
             <h3>{% trans %}All Year Data{% endtrans %}</h3>
             <canvas id="chart{{ source.id }}old" width="400" height="400"></canvas>
             <script type="application/javascript">
