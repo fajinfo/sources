@@ -18,13 +18,13 @@
                         datasets: [{
                             label: '{% trans %}Battery Voltage{% endtrans %}',
                             data: [{% for up in source.sensor.first.uplinks %}'{{ up.battery }}', {% endfor %}],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
-                            borderColor: Utils.CHART_COLORS.red,
+                            backgroundColor: 'rgb(255, 99, 132)',
+                            borderColor: 'rgb(255, 99, 132)',
                         },{
                             label: '{% trans %}Flow Rate{% endtrans %}',
                             data: [{% for up in source.sensor.first.uplinks %}'{{ up.waterFlowRate }}', {% endfor %}],
-                            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
-                            borderColor: Utils.CHART_COLORS.blue,
+                            backgroundColor: 'rgb(54, 162, 235)',
+                            borderColor: 'rgb(54, 162, 235)',
                         }, ]
                     }
                 })
