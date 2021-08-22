@@ -42,9 +42,9 @@ class DashboardController extends AbstractDashboardController
             ->setTitle('Suivi des sources');
     }
 
-    public function configureAssets(Assets $assets): Assets
+    public function configureAssets(): Assets
     {
-        return $assets->addJsFile('assets/chart.js.min');
+        return Assets::new()->addJsFile('assets/chart.js.min');
     }
 
     public function configureMenuItems(): iterable
