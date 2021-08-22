@@ -25,7 +25,7 @@ class SourcesCrudController extends AbstractCrudController
             ->setPermission(Action::BATCH_DELETE, 'ROLE_ADMIN')
             ->setPermission(Action::DETAIL, 'SOURCES_VIEW')
             ->setPermission(Action::EDIT, 'SOURCES_ADMIN')
-            ->setPermission(Action::INDEX, 'SOURCES_VIEW')
+            ->setPermission(Action::INDEX, 'ROLE_USER')
             ;
     }
 
