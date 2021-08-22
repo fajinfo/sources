@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Sensors;
 use App\Entity\User;
 use App\Entity\Sources;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -33,6 +34,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linktoDashboard('Tableau de bord', 'fa fa-home');
         yield MenuItem::linkToCrud('Sources', 'fas fa-tint', Sources::class)->setPermission('ROLE_USER');
         yield MenuItem::section('Administration')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Senseurs', 'fas fa-broadcast-tower', Sensors::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class)->setPermission('ROLE_ADMIN');
     }
 }
