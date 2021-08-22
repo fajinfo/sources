@@ -16,12 +16,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends AbstractDashboardController
 {
     /**
+     * @var SourcesRepository
+     */
+    protected $sourcesRepository;
+
+    public function __construct(SourcesRepository $sourcesRepository)
+    {
+        $this->sourcesRepository = $sourcesRepository;
+    }
+
+    /**
      * @Route("/", name="dashboard")
      * @Security("is_granted('ROLE_USER')")
      */
-    public function index(SourcesRepository $sourcesRepository): Response
+    public function index(): Response
     {
-        $sources = $sourcesRepository->findAll();
+        $sources = $this->sourcesRepository->findAll();
         return $this->render('Dashboard/dashboard.html.twig', array('sources' => $sources));
     }
 
