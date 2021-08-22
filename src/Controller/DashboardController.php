@@ -44,7 +44,7 @@ class DashboardController extends AbstractDashboardController
 
     public function configureAssets(): Assets
     {
-        return Assets::new()->addJsFile('assets/chart.js.min');
+        return Assets::new()->addJsFile('assets/chart.min.js');
     }
 
     public function configureMenuItems(): iterable
