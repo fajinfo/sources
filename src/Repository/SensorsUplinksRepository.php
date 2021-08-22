@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Sensors;
 use App\Entity\SensorsUplinks;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +18,13 @@ class SensorsUplinksRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, SensorsUplinks::class);
+    }
+
+    public function getForTable(Sensors $sensor){
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.sensor = :sensor')
+            ->setParameter('sensor', $sensor)
+            ->orderBy('s.date', 'desc');
     }
 
     // /**

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Sensors;
+use App\Repository\SensorsUplinksRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -34,7 +35,7 @@ class SensorsCrudController extends AbstractCrudController
             DateTimeField::new('lastSeen')->hideOnForm()->setTemplatePath('CustomFields/date_since.html.twig'),
             PercentField::new('lastBatteryPercent')->hideOnForm(),
             FormField::addPanel('Uplinks')->onlyOnDetail(),
-            AssociationField::new('uplinks')->onlyOnDetail()->setTemplatePath('CustomFields/associationTable.html.twig'),
+            AssociationField::new('uplinks')->onlyOnDetail()->setTemplatePath('CustomFields/associationTable.html.twig')->setQueryBuilder(SensorsUplinksRepository::getForTable()),
         ];
         return $fields;
     }
