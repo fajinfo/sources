@@ -4,87 +4,92 @@
 {% block main %}
 <div class="row">
     {% for source in sources %}
-    <div class="col-md-6 col-sm-12">
-        <h2>{{ source }}</h2>
-        <h3>{% trans %}Current Month Data{% endtrans %}</h3>
-        <canvas id="chart{{ source.id }}month" width="400" height="400"></canvas>
+        <h1>{{ source }}</h1>
+        <div class="col-md-4 col-sm 12">
+            <h3>{% trans %}Current Month Data{% endtrans %}</h3>
+            <canvas id="chart{{ source.id }}month" width="400" height="400"></canvas>
+                <script type="application/javascript">
+                    var ctx = document.getElementById('chart{{ source.id }}month');
+                    var chart{{ source.id }}month = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            responsive: true,
+                            labels: [{% for up in source.sensor.first.uplinks %}'{{ up.date|date('d/m/Y H:i') }}', {% endfor %}],
+                            datasets: [{
+                                label: '{% trans %}Battery Voltage{% endtrans %}',
+                                data: [{% for up in source.sensor.first.uplinks %}'{{ up.battery }}', {% endfor %}],
+                                backgroundColor: 'rgb(255, 99, 132)',
+                                borderColor: 'rgb(255, 99, 132)',
+                            },{
+                                label: '{% trans %}Flow Rate{% endtrans %}',
+                                data: [{% for up in source.sensor.first.uplinks %}'{{ up.waterFlowRate }}', {% endfor %}],
+                                backgroundColor: 'rgb(54, 162, 235)',
+                                borderColor: 'rgb(54, 162, 235)',
+                            }, ]
+                        }
+                    })
+                </script>
+        </div>
+        <div class="col-md-4 col-sm 12">
+            <h3>{% trans %}Current Year Data{% endtrans %}</h3>
+            <canvas id="chart{{ source.id }}year" width="400" height="400"></canvas>
             <script type="application/javascript">
-                var ctx = document.getElementById('chart{{ source.id }}month');
-                var chart{{ source.id }}month = new Chart(ctx, {
+                var ctx = document.getElementById('chart{{ source.id }}year');
+                var chart{{ source.id }}year = new Chart(ctx, {
                     type: 'line',
                     data: {
                         responsive: true,
-                        labels: [{% for up in source.sensor.first.uplinks %}'{{ up.date|date('d/m/Y H:i') }}', {% endfor %}],
+                        labels: [{% for hf in source.HourlyFlows %}'{{ hf.date|date('d/m/Y H:i') }}', {% endfor %}],
                         datasets: [{
-                            label: '{% trans %}Battery Voltage{% endtrans %}',
-                            data: [{% for up in source.sensor.first.uplinks %}'{{ up.battery }}', {% endfor %}],
-                            backgroundColor: 'rgb(255, 99, 132)',
-                            borderColor: 'rgb(255, 99, 132)',
-                        },{
-                            label: '{% trans %}Flow Rate{% endtrans %}',
-                            data: [{% for up in source.sensor.first.uplinks %}'{{ up.waterFlowRate }}', {% endfor %}],
+                            label: '{% trans %}Medium Flow Rate{% endtrans %}',
+                            data: [{% for hf in source.HourlyFlows %}'{{ hf.mediumFlowrate }}', {% endfor %}],
                             backgroundColor: 'rgb(54, 162, 235)',
                             borderColor: 'rgb(54, 162, 235)',
+                        }, {
+                            label: '{% trans %}Minimum Flow Rate{% endtrans %}',
+                            data: [{% for hf in source.HourlyFlows %}'{{ hf.minimumFlowrate }}', {% endfor %}],
+                            backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                            borderColor: 'rgba(54, 162, 235, 0.4)',
+                        }, {
+                            label: '{% trans %}Maximum Flow Rate{% endtrans %}',
+                            data: [{% for hf in source.HourlyFlows %}'{{ hf.maximumFlowrate }}', {% endfor %}],
+                            backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                            borderColor: 'rgba(54, 162, 235, 0.4)',
                         }, ]
                     }
                 })
             </script>
-        <h3>{% trans %}Current Year Data{% endtrans %}</h3>
-        <canvas id="chart{{ source.id }}year" width="400" height="400"></canvas>
-        <script type="application/javascript">
-            var ctx = document.getElementById('chart{{ source.id }}year');
-            var chart{{ source.id }}year = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    responsive: true,
-                    labels: [{% for hf in source.HourlyFlows %}'{{ hf.date|date('d/m/Y H:i') }}', {% endfor %}],
-                    datasets: [{
-                        label: '{% trans %}Medium Flow Rate{% endtrans %}',
-                        data: [{% for hf in source.HourlyFlows %}'{{ hf.mediumFlowrate }}', {% endfor %}],
-                        backgroundColor: 'rgb(54, 162, 235)',
-                        borderColor: 'rgb(54, 162, 235)',
-                    }, {
-                        label: '{% trans %}Minimum Flow Rate{% endtrans %}',
-                        data: [{% for hf in source.HourlyFlows %}'{{ hf.minimumFlowrate }}', {% endfor %}],
-                        backgroundColor: 'rgba(54, 162, 235, 0.4)',
-                        borderColor: 'rgba(54, 162, 235, 0.4)',
-                    }, {
-                        label: '{% trans %}Maximum Flow Rate{% endtrans %}',
-                        data: [{% for hf in source.HourlyFlows %}'{{ hf.maximumFlowrate }}', {% endfor %}],
-                        backgroundColor: 'rgba(54, 162, 235, 0.4)',
-                        borderColor: 'rgba(54, 162, 235, 0.4)',
-                    }, ]
-                }
-            })
-        </script>
-        <h3>{% trans %}All Year Data{% endtrans %}</h3>
-        <canvas id="chart{{ source.id }}old" width="400" height="400"></canvas>
-        <script type="application/javascript">
-            var ctx = document.getElementById('chart{{ source.id }}old');
-            var chart{{ source.id }}old = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    responsive: true,
-                    labels: [{% for hf in source.DailyFlows %}'{{ hf.date|date('d/m/Y H:i') }}', {% endfor %}],
-                    datasets: [{
-                        label: '{% trans %}Medium Flow Rate{% endtrans %}',
-                        data: [{% for hf in source.DailyFlows %}'{{ hf.mediumFlowrate }}', {% endfor %}],
-                        backgroundColor: 'rgb(54, 162, 235)',
-                        borderColor: 'rgb(54, 162, 235)',
-                    }, {
-                        label: '{% trans %}Minimum Flow Rate{% endtrans %}',
-                        data: [{% for hf in source.DailyFlows %}'{{ hf.minimumFlowrate }}', {% endfor %}],
-                        backgroundColor: 'rgba(54, 162, 235, 0.4)',
-                        borderColor: 'rgba(54, 162, 235, 0.4)',
-                    }, {
-                        label: '{% trans %}Maximum Flow Rate{% endtrans %}',
-                        data: [{% for hf in source.DailyFlows %}'{{ hf.maximumFlowrate }}', {% endfor %}],
-                        backgroundColor: 'rgba(54, 162, 235, 0.4)',
-                        borderColor: 'rgba(54, 162, 235, 0.4)',
-                    }, ]
-                }
-            })
-        </script>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <h3>{% trans %}All Year Data{% endtrans %}</h3>
+            <canvas id="chart{{ source.id }}old" width="400" height="400"></canvas>
+            <script type="application/javascript">
+                var ctx = document.getElementById('chart{{ source.id }}old');
+                var chart{{ source.id }}old = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        responsive: true,
+                        labels: [{% for hf in source.DailyFlows %}'{{ hf.date|date('d/m/Y H:i') }}', {% endfor %}],
+                        datasets: [{
+                            label: '{% trans %}Medium Flow Rate{% endtrans %}',
+                            data: [{% for hf in source.DailyFlows %}'{{ hf.mediumFlowrate }}', {% endfor %}],
+                            backgroundColor: 'rgb(54, 162, 235)',
+                            borderColor: 'rgb(54, 162, 235)',
+                        }, {
+                            label: '{% trans %}Minimum Flow Rate{% endtrans %}',
+                            data: [{% for hf in source.DailyFlows %}'{{ hf.minimumFlowrate }}', {% endfor %}],
+                            backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                            borderColor: 'rgba(54, 162, 235, 0.4)',
+                        }, {
+                            label: '{% trans %}Maximum Flow Rate{% endtrans %}',
+                            data: [{% for hf in source.DailyFlows %}'{{ hf.maximumFlowrate }}', {% endfor %}],
+                            backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                            borderColor: 'rgba(54, 162, 235, 0.4)',
+                        }, ]
+                    }
+                })
+            </script>
+        </div>
     </div>
     {% endfor %}
 </div>
