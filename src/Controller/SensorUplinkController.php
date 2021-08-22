@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Sensors;
 use App\Entity\SensorsUplinks;
 use App\Repository\SensorsRepository;
+use App\Repository\SensorsUplinksRepository;
+use App\Repository\SourcesRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,7 +60,33 @@ class SensorUplinkController extends AbstractController
         return new JsonResponse(['error' => 'Not Valid Authorization Key'], Response::HTTP_UNAUTHORIZED);
     }
 
-    public function archive(){
+    /**
+     * @param SourcesRepository $sourcesRepository
+     * @param SensorsUplinksRepository $sensorsUplinksRepository
+     * @param EntityManagerInterface $em
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @Route("api/archive/uplink", name="api_archive_uplink")
+     */
+    public function archive(SourcesRepository $sourcesRepository, SensorsUplinksRepository $sensorsUplinksRepository, EntityManagerInterface $em){
+        $sources = $sourcesRepository->findAll();
 
+        /**
+         * On Archive les données du même jour il y a un mois dans la base "HourlyFlow"
+         */
+        $working_date = new \DateTime();
+        $working_date->setTime('0', '0', '0');
+        $working_date->modify('-1 month');
+
+        foreach($sources as $source){
+            $hourlyFlow = array();
+            for($i=0; $i <24; $i++){
+                $hourlyFlow[$i] = $sensorsUplinksRepository->getForArchive($working_date, $source);
+                $em->persist($hourlyFlow[$i]);
+                $working_date->modify('+1 hour');
+            }
+            $sensorsUplinksRepository->removeArchivedDay($working_date, $source);
+            $em->flush();
+        }
     }
 }

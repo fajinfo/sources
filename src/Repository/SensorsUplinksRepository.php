@@ -23,6 +23,13 @@ class SensorsUplinksRepository extends ServiceEntityRepository
         parent::__construct($registry, SensorsUplinks::class);
     }
 
+    /**
+     * @param DateTime $dateTime
+     * @param Sources $source
+     * @return HourlyFlow
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function getForArchive(DateTime $dateTime, Sources $source){
         $qb = $this->createQueryBuilder('u');
 
@@ -43,6 +50,24 @@ class SensorsUplinksRepository extends ServiceEntityRepository
         $hourlyFlow->setMinimumFlowrate($result['min_flow']);
         $hourlyFlow->setSource($source);
         return new HourlyFlow();
+    }
+
+    /**
+     * @param DateTime $dateTime
+     * @param Sources $source
+     * @return int|mixed|string
+     */
+    public function removeArchivedDay(DateTime $dateTime, Sources $source){
+        $qb = $this->createQueryBuilder('u')
+            ->delete('u')
+            ->leftJoin('u.sensor', 's')
+            ->andWhere('s.source = :source')
+            ->setParameter('source', $source)
+            ->andWhere('u.date BETWEEN :from and :to')
+            ->setParameter('from', $dateTime->setTime(0, 0, 0))
+            ->setParameter('to', $dateTime->setTime(23, 59, 59))
+        ;
+        return $qb->getQuery()->execute();
     }
 
     // /**
