@@ -6,12 +6,23 @@
     {% for source in sources %}
         <h1>{{ source }}</h1>
         <div class="col-md-6 col-sm-12">
-            <div class="feature col">
-                <div class="feature-icon bg-primary bg-gradient">
-                    <i class="fa fa-hourglass"></i>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Stats</h3>
                 </div>
-                <h2>{% trans %}Last Seen{% endtrans %}</h2>
-                <p>{{ source.sensor.first.lastSeen|ago }}</p>
+                <div class="panel-body">
+                    <ul class="list-group" style="margin-left: 0;">
+                        <li class="list-group-item">
+                            <span class="badge">45</span>
+                            Genus count
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge">45</span>
+                            Published genus count
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="col-md-6 col-sm-12">
             <h3>{% trans %}Current Month Data{% endtrans %}</h3>
