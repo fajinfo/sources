@@ -35,7 +35,7 @@ class SensorsCrudController extends AbstractCrudController
             DateTimeField::new('lastSeen')->hideOnForm()->setTemplatePath('CustomFields/date_since.html.twig'),
             PercentField::new('lastBatteryPercent')->hideOnForm(),
             FormField::addPanel('Uplinks')->onlyOnDetail(),
-            AssociationField::new('uplinks')->onlyOnDetail()->setTemplatePath('CustomFields/associationTable.html.twig')->setQueryBuilder(SensorsUplinksRepository::getForTable()),
+            AssociationField::new('uplinks')->onlyOnDetail()->setTemplatePath('CustomFields/associationTable.html.twig')->setQueryBuilder(SensorsUplinksRepository::queryBuilderForSensorsTable()),
         ];
         return $fields;
     }
