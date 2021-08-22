@@ -25,7 +25,7 @@ class Sources
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Sensors::class, inversedBy="source")
+     * @ORM\OneToMany(targetEntity=Sensors::class, mappedBy="source", orphanRemoval=true)
      */
     private $sensor;
 

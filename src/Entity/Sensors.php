@@ -20,7 +20,7 @@ class Sensors
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Sources::class, mappedBy="sensor", orphanRemoval=true)
+     * @ORM\ManyToOne(targetEntity=Sources::class, inversedBy="sensor")
      */
     private $source;
 
@@ -64,6 +64,14 @@ class Sensors
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * @param Sources $source
+     */
+    public function setSource(Sources $source = null): void
+    {
+        $this->source = $source;
     }
 
     public function getDevEui(): ?string
