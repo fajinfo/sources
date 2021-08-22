@@ -10,7 +10,7 @@
         <canvas id="chart{{ source.id }}month" width="400" height="400"></canvas>
             <script type="application/javascript">
                 var ctx = document.getElementById('chart{{ source.id }}month');
-                var {{ source.id }}_month = new Chart(ctx, {
+                var {{ source.id }}month = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: [{% for up in source.sensor.first.uplinks %}'{{ up.date|date('d/m/Y H:i') }}', {% endfor %}],
