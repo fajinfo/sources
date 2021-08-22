@@ -87,8 +87,9 @@ class SensorUplinkController extends AbstractController
                 }
                 $working_date->modify('+1 hour');
             }
-            $sensorsUplinksRepository->removeArchivedDay($working_date, $source);
             $em->flush();
         }
+        $sensorsUplinksRepository->removeArchivedDay($working_date);
+        $em->flush();
     }
 }
