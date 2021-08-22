@@ -26,8 +26,8 @@ class SourcesRepository extends ServiceEntityRepository
      */
     public function findForDashboardWithData(User $user){
         $qb = $this->createQueryBuilder('s')
-            ->leftJoin('s.view_user', 'vu')
-            ->andWhere('vu.ViewUser = :user')
+            ->leftJoin('s.ViewUser', 'vu')
+            ->andWhere('vu = :user')
             ->setParameter('user', $user);
         return $qb->getQuery()->getResult();
     }
