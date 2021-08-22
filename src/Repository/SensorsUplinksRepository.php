@@ -32,7 +32,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
      */
     public function getForArchive(DateTime $dateTime, Sources $source){
         $qb = $this->createQueryBuilder('u');
-        $dateFin = $dateTime;
+        $dateFin = clone $dateTime;
         $dateFin->modify('+59 minutes');
 
         $qb->leftJoin('u.sensor', 's')
@@ -62,7 +62,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
      * @return int|mixed|string
      */
     public function removeArchivedDay(DateTime $dateTime, Sources $source){
-        $dateFin = $dateTime;
+        $dateFin = clone $dateTime;
         $dateFin->setTime(23, 59, 59);
         $qb = $this->createQueryBuilder('u')
             ->delete('u')
