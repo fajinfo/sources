@@ -64,15 +64,17 @@ class SensorsUplinksRepository extends ServiceEntityRepository
      * @return int|mixed|string
      */
     public function removeArchivedDay(DateTime $dateTime, Sources $source){
+        $dateDebut = clone $dateTime;
+        $dateDebut->setTime(0,0,0);
         $dateFin = clone $dateTime;
         $dateFin->setTime(23, 59, 59);
         $qb = $this->createQueryBuilder('u')
-            ->delete('u')
+            ->delete()
             ->leftJoin('u.sensor', 's')
             ->andWhere('s.source = :source')
             ->setParameter('source', $source)
             ->andWhere('u.date BETWEEN :from and :to')
-            ->setParameter('from', $dateTime->setTime(0, 0, 0))
+            ->setParameter('from', $dateDebut)
             ->setParameter('to', $dateFin)
         ;
         return $qb->getQuery()->execute();
