@@ -45,7 +45,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
 
         print_r($qb->getQuery()->getSQL());
 
-        $result = $qb->getQuery()->getSingleScalarResult();
+        $result = $qb->getQuery()->getScalarResult();
 
         $hourlyFlow = new HourlyFlow();
         $hourlyFlow->setDate($dateTime);
