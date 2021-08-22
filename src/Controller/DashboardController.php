@@ -31,7 +31,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linktoDashboard('Tableau de bord', 'fa fa-home');
-        yield MenuItem::linkToCrud('Sources', 'fas fa-drop', Sources::class)->setPermission('ROLE_USER');
+        yield MenuItem::linkToCrud('Sources', 'fas fa-tint', Sources::class)->setPermission('ROLE_USER');
         yield MenuItem::section('Administration')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class)->setPermission('ROLE_ADMIN');
     }
