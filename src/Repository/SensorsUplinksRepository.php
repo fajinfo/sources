@@ -41,14 +41,14 @@ class SensorsUplinksRepository extends ServiceEntityRepository
             ->andWhere('s.source = :se')
             ->setParameter('se', $source)
             ->andWhere('u.date BETWEEN :from AND :to')
-            ->setParameter('from', $dateTime)
+            ->setParameter('from', $dateDebut)
             ->setParameter('to', $dateFin);
 
         $result = $qb->getQuery()->getScalarResult();
 
         if($result[0]['avg_flow'] != null){
             $hourlyFlow = new HourlyFlow();
-            $hourlyFlow->setDate($dateTime);
+            $hourlyFlow->setDate($dateDebut);
             $hourlyFlow->setMaximumFlowrate($result[0]['max_flow']);
             $hourlyFlow->setMediumFlowrate($result[0]['avg_flow']);
             $hourlyFlow->setMinimumFlowrate($result[0]['min_flow']);
