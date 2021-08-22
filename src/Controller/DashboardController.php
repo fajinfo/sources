@@ -32,7 +32,7 @@ class DashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
-        $sources = $this->sourcesRepository->findAll();
+        $sources = $this->sourcesRepository->findForDashboardWithData($this->getUser());
         return $this->render('Dashboard/dashboard.html.twig', array('sources' => $sources));
     }
 

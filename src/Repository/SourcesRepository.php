@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Sources;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,18 @@ class SourcesRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Sources::class);
+    }
+
+    /**
+     * @param User $user
+     * @return Sources[]
+     */
+    public function findForDashboardWithData(User $user){
+        $qb = $this->createQueryBuilder('s')
+            ->leftJoin('s.viewUser', 'vu')
+            ->andWhere('vu.user = :user')
+            ->setParameter('user', $user);
+        return $qb->getQuery()->getResult();
     }
 
     // /**
