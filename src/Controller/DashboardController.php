@@ -20,7 +20,7 @@ class DashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
-        return $this->render('Dashboard/dashboard.html.twig');
+        return $this->renderView('Dashboard/dashboard.html.twig');
     }
 
     public function configureDashboard(): Dashboard
