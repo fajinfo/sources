@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -25,13 +26,15 @@ class SensorsCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
+        $fields =  [
             IdField::new('id')->hideOnForm(),
             AssociationField::new('source')->hideOnForm(),
             TextField::new('devEui'),
             DateTimeField::new('lastSeen')->hideOnForm()->setTemplatePath('CustomFields/date_since.html.twig'),
             PercentField::new('lastBatteryPercent')->hideOnForm(),
-            AssociationField::new('uplinks')->hideOnIndex()->hideOnForm(),
+            FormField::addPanel('Uplinks')->onlyOnDetail(),
+            AssociationField::new('uplinks')->onlyOnDetail(),
         ];
+        return $fields;
     }
 }
