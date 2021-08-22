@@ -101,8 +101,7 @@ class SensorUplinkController extends AbstractController
             // TODO: Add System to work from 28 to 31 day with the code above.
             foreach ($sources as $source) {
                 $working_date = new \DateTime();
-                $working_date->modify('-13 month');
-                $working_date->modify('first day of month');
+                $working_date->modify('first day of -13 month');
                 $dailyFlow = array();
                 for ($i = 0; $i < $working_date->format('t'); $i++) {
                     $dailyFlow[$i] = $hourlyFlowRepository->getForArchive($working_date, $source);
