@@ -87,9 +87,9 @@ class SensorUplinkController extends AbstractController
         $working_date = new \DateTime();
         if($working_date->format('d') == 22 /* TODO : Set this value to 1*/) {
             $working_date->modify('-1 day');
-            $lastMonthNbDay = intval($working_date->format('t'))/
+            $lastMonthNbDay = $working_date->format('t')/
             $working_date->modify('-1 month');
-            $workingMonthNbDay = intval($working_date->format('t'));
+            $workingMonthNbDay = $working_date->format('t');
             $working_date->modify('+1 month');
 
             if($workingMonthNbDay > $lastMonthNbDay){
