@@ -5,10 +5,16 @@
     <table>
         <tr>
             <th>Id</th>
+            <th>Date</th>
+            <th>Battery</th>
+            <th>Flowrate</th>
         </tr>
         {% for row in field.value %}
         <tr>
-            <td>{{ row.__toString() }}</td>
+            <td>{{ row.id }}</td>
+            <td>{{ row.date|ago }}</td>
+            <td>{{ row.batteryPercent }} %</td>
+            <td>{{ row.flowrate }} lt/min</td>
         </tr>
         {% endfor %}
     </table>
