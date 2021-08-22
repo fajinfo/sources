@@ -65,9 +65,7 @@ class HourlyFlowRepository extends ServiceEntityRepository
     public function removeArchivedMonth(DateTime $dateTime){
         $dateDebut = clone $dateTime;
         $dateDebut->setTime(0,0,0);
-        $dateFin = clone $dateTime;
-        $dateFin->modify('last day of current month');
-        $dateFin->setTime(23,59,59);
+        $dateFin = new DateTime($dateDebut->format('Y-m-t 23:59:59'));
         $qb = $this->createQueryBuilder('u')
             ->delete(HourlyFlow::class, 'hf')
             ->andWhere('hf.date BETWEEN :from and :to')
