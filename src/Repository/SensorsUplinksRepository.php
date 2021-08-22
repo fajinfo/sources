@@ -21,11 +21,6 @@ class SensorsUplinksRepository extends ServiceEntityRepository
         parent::__construct($registry, SensorsUplinks::class);
     }
 
-    public static function queryBuilderForSensorsTable(SensorsUplinksRepository $r): QueryBuilder{
-        return $r->createQueryBuilder('s')
-            ->orderBy('s.date', 'desc');
-    }
-
     // /**
     //  * @return SensorsUplinks[] Returns an array of SensorsUplinks objects
     //  */
