@@ -40,7 +40,7 @@ class HourlyFlowRepository extends ServiceEntityRepository
         $qb->select('MAX(hf.maximumFlowrate) AS max_flow, MIN(hf.minimumFlowrate) AS min_flow, AVG(hf.mediumFlowrate) AS avg_flow')
             ->andWhere('hf.source = :se')
             ->setParameter('se', $source)
-            ->andWhere('u.date BETWEEN :from AND :to')
+            ->andWhere('hf.date BETWEEN :from AND :to')
             ->setParameter('from', $dateDebut)
             ->setParameter('to', $dateFin);
 
