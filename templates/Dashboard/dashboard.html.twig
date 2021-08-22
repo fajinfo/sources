@@ -6,7 +6,17 @@
     {% for source in sources %}
     <div class="col-md-6 col-sm-12">
         <h2>{{ source }}</h2>
-        <h3>{% trans %}Battery Monitoring{% endtrans %}</h3>
+        <h3>{% trans %}Current Month Data{% endtrans %}</h3>
+        <canvas id="{{ source.id }}_month" width="400" height="400"></canvas>
+            <script type="application/javascript">
+                var ctx = document.getElementById('{{ source.id }}_month');
+                var {{ source.id }}_month = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [{% for up in source.sensor.first.uplinks %}{{ up.date|date('d/m/Y H:i') }}, {% endfor %}]
+                    }
+                })
+            </script>
     </div>
     {% endfor %}
 </div>
