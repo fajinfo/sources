@@ -13,7 +13,7 @@
                 var {{ source.id }}_month = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: [{% for up in source.sensor.first.uplinks %}{{ up.date|date('d/m/Y H:i') }}, {% endfor %}]
+                        labels: [{% for up in source.sensor.first.uplinks %}'{{ up.date|date('d/m/Y H:i') }}', {% endfor %}]
                     }
                 })
             </script>
