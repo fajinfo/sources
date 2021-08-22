@@ -8,17 +8,21 @@
         <div class="col-md-6 col-sm-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Stats</h3>
+                    <h3 class="panel-title">{% trans %}Informations{% endtrans %}</h3>
                 </div>
                 <div class="panel-body">
                     <ul class="list-group" style="margin-left: 0;">
                         <li class="list-group-item">
-                            <span class="badge">45</span>
-                            Genus count
+                            <span class="badge">{{ source.sensor.first.lastSeen|ago }}</span>
+                            {% trans %}Dernière actualisation{% endtrans %}
                         </li>
                         <li class="list-group-item">
-                            <span class="badge">45</span>
-                            Published genus count
+                            <span class="badge">{{ source.sensor.first.lastBatteryPercent }} %</span>
+                            {% trans %}Etat actuel de la batterie{% endtrans %}
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge">{{ source.sensor.first.uplink.last.waterFlowRate }} l/min</span>
+                            {% trans %}Débit actuel{% endtrans %}
                         </li>
                     </ul>
                 </div>
