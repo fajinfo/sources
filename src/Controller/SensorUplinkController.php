@@ -35,12 +35,12 @@ class SensorUplinkController extends AbstractController
 
                 $payload = json_decode(stripslashes($data['objectJSON']), true);
 
-                if(!empty($json['Bat'])){
-                    $uplink->setBattery($json['Bat']);
+                if(!empty($payload['Bat'])){
+                    $uplink->setBattery($payload['Bat']);
                 }
 
-                if(!empty($json['FlowRate'])){
-                    $uplink->setWaterFlowRate('FlowRate');
+                if(!empty($payload['FlowRate'])){
+                    $uplink->setWaterFlowRate($payload['FlowRate']);
                 }
 
                 $sensor->setLastSeen($uplink->getDate())
