@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="pzXBUOu" resname="Current Informations">
+        <source>Current Informations</source>
+        <target>Informations courantes</target>
+      </trans-unit>
+      <trans-unit id="97rGn4e" resname="Dernière actualisation">
+        <source>Dernière actualisation</source>
+        <target>Dernière actualisation</target>
+      </trans-unit>
+      <trans-unit id="BFmsbmB" resname="Etat actuel de la batterie">
+        <source>Etat actuel de la batterie</source>
+        <target>Etat actuel de la batterie</target>
+      </trans-unit>
+      <trans-unit id="McCeNTI" resname="Débit actuel">
+        <source>Débit actuel</source>
+        <target>Débit actuel</target>
+      </trans-unit>
+      <trans-unit id="nrfe9PJ" resname="Current Month Data">
+        <source>Current Month Data</source>
+        <target>Données du mois en cours</target>
+      </trans-unit>
+      <trans-unit id="jbAzT08" resname="Battery Voltage">
+        <source>Battery Voltage</source>
+        <target>Tension de la batterie</target>
+      </trans-unit>
+      <trans-unit id="NLn1haH" resname="Flow Rate">
+        <source>Flow Rate</source>
+        <target>Débit</target>
+      </trans-unit>
+      <trans-unit id="DuaD_mz" resname="Current Year Data">
+        <source>Current Year Data</source>
+        <target>Données de l'année en cours</target>
+      </trans-unit>
+      <trans-unit id="hTTRuTe" resname="Medium Flow Rate">
+        <source>Medium Flow Rate</source>
+        <target>Débit moyen</target>
+      </trans-unit>
+      <trans-unit id="5Kshgvn" resname="Minimum Flow Rate">
+        <source>Minimum Flow Rate</source>
+        <target>Débit Minimum</target>
+      </trans-unit>
+      <trans-unit id="HNfzNWb" resname="Maximum Flow Rate">
+        <source>Maximum Flow Rate</source>
+        <target>Débit Maximum</target>
+      </trans-unit>
+      <trans-unit id="l7RqOcN" resname="Older Year Data">
+        <source>Older Year Data</source>
+        <target>Années précèdantes</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
