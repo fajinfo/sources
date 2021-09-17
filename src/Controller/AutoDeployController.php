@@ -25,16 +25,16 @@ class AutoDeployController extends AbstractController
         if($api_key != $this->getParameter('app.autoDeploy_api_key')){
             return new Response('Autorization not valid', Response::HTTP_FORBIDDEN);
         }
-        $commands = array(
-            'cd ../',
-            'git pull',
-            'git status',
-            'git submodule sync',
-            'git submodule update',
-            'git submodule status',
-            'composer update',
-            'php bin/console cache:clear'
-        );
+        $commands = [
+            ['cd', '../'],
+            ['git', 'pull'],
+            ['git', 'status'],
+            ['git', 'submodule', 'sync'],
+            ['git', 'submodule', 'update'],
+            ['git', 'submodule', 'status'],
+            ['composer', 'update'],
+            ['php', 'bin/console', 'cache:clear']
+        ];
         $logger->info('-- Starting AutoDeployer Script --');
         $error = false;
         foreach($commands as $command){
