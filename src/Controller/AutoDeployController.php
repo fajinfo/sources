@@ -26,6 +26,7 @@ class AutoDeployController extends AbstractController
             return new Response('Autorization not valid', Response::HTTP_FORBIDDEN);
         }
         $commands = array(
+            'cd ../',
             'git pull',
             'git status',
             'git submodule sync',
@@ -35,6 +36,7 @@ class AutoDeployController extends AbstractController
             'php bin/console cache:clear'
         );
         $logger->info('-- Starting AutoDeployer Script --');
+        $error = false;
         foreach($commands as $command){
             try {
                 $process = new Process([$command]);
@@ -46,10 +48,15 @@ class AutoDeployController extends AbstractController
 
                 $logger->info('Command executed : '.$command, ['return' => $process->getOutput()] );
             }catch (\Exception $e){
+                $error = true;
                 $logger->alert('Command Failed : '.$command, ['Error' => $e->getMessage()]);
             }
         }
         $logger->info('-- Ending AutoDeployer Script --');
+        if($error){
+            return new Response('Error In AutoDeployer', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
         return new Response('AutoDeployer success !', Response::HTTP_OK);
+
     }
 }
