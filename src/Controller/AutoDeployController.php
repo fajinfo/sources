@@ -4,9 +4,13 @@ namespace App\Controller;
 
 
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AutoDeployController extends AbstractController
@@ -18,7 +22,7 @@ class AutoDeployController extends AbstractController
      *
      * @Route("/api/auto_deploy", name="api_auto_deploy" )
      */
-    public function autoDeploy(Request $request, LoggerInterface $logger){
+    public function autoDeploy(Request $request, LoggerInterface $logger, KernelInterface $kernel){
         $api_key = $request->headers->get('Authorization');
         if($api_key != $this->getParameter('app.autoDeploy_api_key')){
             return new Response('Autorization not valid', Response::HTTP_FORBIDDEN);
@@ -33,10 +37,18 @@ class AutoDeployController extends AbstractController
             'php bin/console cache:clear'
         );
         $logger->info('-- Starting AutoDeployer Script --');
+
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
         foreach($commands as $command){
             try {
-                $tmp = shell_exec($command);
-                $logger->info('Command executed : '.$command, ['return' => $tmp] );
+                $input = new ArrayInput([
+                    'command' => $command
+                ]);
+                $output = new BufferedOutput();
+                $application->run($input, $output);
+                $logger->info('Command executed : '.$command, ['return' => $output->fetch()] );
             }catch (\Exception $e){
                 $logger->alert('Command Failed : '.$command, ['Error' => $e->getMessage()]);
             }
