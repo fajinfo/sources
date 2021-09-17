@@ -26,7 +26,6 @@ class AutoDeployController extends AbstractController
             return new Response('Autorization not valid', Response::HTTP_FORBIDDEN);
         }
         $commands = [
-            ['cd', '../', ''],
             ['git', 'pull', ''],
             ['git', 'status', ''],
             ['git', 'submodule', 'sync'],
@@ -40,6 +39,7 @@ class AutoDeployController extends AbstractController
         foreach($commands as $command){
             try {
                 $process = new Process([$command[0], $command[1], $command[2]]);
+                $process->setWorkingDirectory(dirname(__DIR__));
                 $process->run();
 
                 if (!$process->isSuccessful()) {
