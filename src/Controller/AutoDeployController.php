@@ -26,20 +26,20 @@ class AutoDeployController extends AbstractController
             return new Response('Autorization not valid', Response::HTTP_FORBIDDEN);
         }
         $commands = [
-            ['cd', '../'],
-            ['git', 'pull'],
-            ['git', 'status'],
+            ['cd', '../', ''],
+            ['git', 'pull', ''],
+            ['git', 'status', ''],
             ['git', 'submodule', 'sync'],
             ['git', 'submodule', 'update'],
             ['git', 'submodule', 'status'],
-            ['composer', 'update'],
+            ['composer', 'update', ''],
             ['php', 'bin/console', 'cache:clear']
         ];
         $logger->info('-- Starting AutoDeployer Script --');
         $error = false;
         foreach($commands as $command){
             try {
-                $process = new Process([$command]);
+                $process = new Process([$command[0], $command[1], $command[2]]);
                 $process->run();
 
                 if (!$process->isSuccessful()) {
