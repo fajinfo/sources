@@ -19,7 +19,7 @@ class AutoDeployController extends AbstractController
      * @Route("/api/auto_deploy", name="api_auto_deploy" )
      */
     public function autoDeploy(Request $request, LoggerInterface $logger){
-        $api_key = $request->get('autorization');
+        $api_key = $request->get('Autorization');
         if($api_key != $this->getParameter('app.autoDeploy_api_key')){
             return new Response('Autorization not valid', Response::HTTP_FORBIDDEN);
         }
