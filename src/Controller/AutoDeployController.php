@@ -35,7 +35,7 @@ class AutoDeployController extends AbstractController
         $logger->info('-- Starting AutoDeployer Script --');
         foreach($commands as $command){
             try {
-                $tmp = shell_exec($command);
+                $tmp = \shell_exec($command);
                 $logger->info('Command executed : '.$command, ['return' => $tmp] );
             }catch (\Exception $e){
                 $logger->alert('Command Failed : '.$command, ['Error' => $e->getMessage()]);
