@@ -46,10 +46,10 @@ class AutoDeployController extends AbstractController
                     throw new ProcessFailedException($process);
                 }
 
-                $logger->info('Command executed : '.$command, ['return' => $process->getOutput()] );
+                $logger->info('Command executed : '.$command[0].' '.$command[1].' '.$command[2], ['return' => $process->getOutput()] );
             }catch (\Exception $e){
                 $error = true;
-                $logger->alert('Command Failed : '.$command, ['Error' => $e->getMessage()]);
+                $logger->alert('Command Failed : '.$command[0].' '.$command[1].' '.$command[2], ['Error' => $e->getMessage()]);
             }
         }
         $logger->info('-- Ending AutoDeployer Script --');
