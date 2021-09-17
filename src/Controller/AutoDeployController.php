@@ -7,6 +7,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AutoDeployController extends AbstractController
@@ -35,8 +37,14 @@ class AutoDeployController extends AbstractController
         $logger->info('-- Starting AutoDeployer Script --');
         foreach($commands as $command){
             try {
-                $tmp = \shell_exec($command);
-                $logger->info('Command executed : '.$command, ['return' => $tmp] );
+                $process = new Process([$command]);
+                $process->run();
+
+                if (!$process->isSuccessful()) {
+                    throw new ProcessFailedException($process);
+                }
+
+                $logger->info('Command executed : '.$command, ['return' => $process->getOutput()] );
             }catch (\Exception $e){
                 $logger->alert('Command Failed : '.$command, ['Error' => $e->getMessage()]);
             }
