@@ -4,7 +4,8 @@
 {% block main %}
 <div class="row">
     {% for source in sources %}
-        <h1>{{ source }}</h1>
+        <h1>{{ source }}
+            {% if source.sensor.first %}
         <div class="col-md-6 col-sm-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -113,6 +114,11 @@
                 })
             </script>
         </div>
+            {% else %}
+                <div class="col-md-6 col-sm-12">
+                    <h3>{% trans %}No sensor connected{% endtrans %}</h3>
+                </div>
+            {% endif %}
     </div>
     {% endfor %}
 </div>
