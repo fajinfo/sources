@@ -13,15 +13,15 @@
                 <div class="panel-body">
                     <ul class="list-group" style="margin-left: 0;">
                         <li class="list-group-item">
-                            <span class="badge">{{ source.sensor.first.lastSeen|ago }}</span>
+                            <span class="badge">{% if source.sensor %}{{ source.sensor.first.lastSeen|ago }}{% endif %}</span>
                             {% trans %}Dernière actualisation{% endtrans %}
                         </li>
                         <li class="list-group-item">
-                            <span class="badge">{{ source.sensor.first.lastBatteryPercent }} %</span>
+                            <span class="badge">{% if source.sensor %}{{ source.sensor.first.lastBatteryPercent }}{% endif %}</span>
                             {% trans %}Etat actuel de la batterie{% endtrans %}
                         </li>
                         <li class="list-group-item">
-                            <span class="badge">{{ source.sensor.first.uplinks.last.waterFlowRate }} l/min</span>
+                            <span class="badge">{% if source.sensor %}{{ source.sensor.first.uplinks.last.waterFlowRate }} l/min{% endif %}</span>
                             {% trans %}Débit actuel{% endtrans %}
                         </li>
                     </ul>
