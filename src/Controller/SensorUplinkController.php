@@ -26,22 +26,14 @@ class SensorUplinkController extends AbstractController
     {
         if($request->headers->get('Authorization') === 'oHAwmnQLI89B8WgPq4tC8MyQbKEOD1fR'){
             $data = json_decode($request->getContent(), true);
-            $sensor = $repository->findOneBy(['devEui' => bin2hex(base64_decode($data['devEUI']))]);
+            $sensor = $repository->findOneBy(['devEui' => bin2hex(base64_decode($data['DevEUI_uplink']['DevEUI']))]);
 
             if($sensor instanceof Sensors){
                 $uplink = new SensorsUplinks();
-                $uplink->setDate(new \DateTime())
+                $uplink->setDate(new \DateTime($data['DevEUI_uplink']['Time']))
                     ->setSensor($sensor);
 
-                $payload = json_decode(stripslashes($data['objectJSON']), true);
-
-                if(!empty($payload['Bat'])){
-                    $uplink->setBattery($payload['Bat']);
-                }
-
-                if(!empty($payload['FlowRate'])){
-                    $uplink->setWaterFlowRate($payload['FlowRate']);
-                }
+                $uplink->decodePayload($data['DevEUI_uplink']['FPort'], $data['DevEUI_uplink']['payload_hex']);
 
                 $sensor->setLastSeen($uplink->getDate())
                     ->setLastBattery($uplink->getBattery());
@@ -55,7 +47,7 @@ class SensorUplinkController extends AbstractController
                 return new JsonResponse([], Response::HTTP_OK);
 
             }
-            $logger->error('Tracker information received without the EUI Registred ', ['EUI_Received' => bin2hex(base64_decode($data['devEUI']))]);
+            $logger->error('Tracker information received without the EUI Registred ', ['EUI_Received' => bin2hex(base64_decode($data['DevEUI_uplink']['DevEUI']))]);
             return new JsonResponse(['error' => 'Tracker not registered'], Response::HTTP_NOT_FOUND);
         }
         $logger->error('Tracker information received without the correct Autorization Header ', ['Authorization' => $request->headers->get('Authorization')]);
