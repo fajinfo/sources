@@ -157,11 +157,7 @@ class SensorsUplinks
 
                 $date = new \DateTime();
                 $date->setTimestamp(hexdec($hex[7].$hex[8].$hex[9].$hex[10]));
-
-               /* $flag=(bytes[0]&0xFC)>>2;
-
-                decode.Alarm=(bytes[0]&0x02)?"TRUE":"FALSE";*/
-
+                $this->fromSensorDate = $date;
                 break;
             case 3:
                 $this->type = "Historical Water Flow";
