@@ -107,11 +107,11 @@ class Sensors
     {
         $batteryV = round($this->lastBattery, 1);
         $batteryCurve = [3.5 => 1, 3.4 => 0.98, 3.3 => 0.90, 3.2 => 0.70];
-        if($batteryV > 3.6){
+        if($batteryV >= 3.6){
             return 1.01;
         }
 
-        if($batteryV < 3.1){
+        if($batteryV <= 3.1){
             return 0;
         }
 
