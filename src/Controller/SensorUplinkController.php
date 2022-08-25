@@ -27,7 +27,7 @@ class SensorUplinkController extends AbstractController
         if($request->headers->get('Authorization') === 'oHAwmnQLI89B8WgPq4tC8MyQbKEOD1fR'){
             $data = json_decode($request->getContent(), true);
             $logger->debug('Received new tracker info', $data);
-            $sensor = $repository->findOneBy(['devEui' => bin2hex(base64_decode($data['data_raw']['DevEUI_uplink']['DevEUI']))]);
+            $sensor = $repository->findOneBy(['devEui' => $data['data_raw']['DevEUI_uplink']['DevEUI']]);
 
             if($sensor instanceof Sensors){
                 $uplink = new SensorsUplinks();
@@ -48,7 +48,7 @@ class SensorUplinkController extends AbstractController
                 return new JsonResponse([], Response::HTTP_OK);
 
             }
-            $logger->error('Tracker information received without the EUI Registred ', ['EUI_Received' => bin2hex(base64_decode($data['data_raw']['DevEUI_uplink']['DevEUI']))]);
+            $logger->error('Tracker information received without the EUI Registred ', ['EUI_Received' => $data['data_raw']['DevEUI_uplink']['DevEUI']]);
             return new JsonResponse(['error' => 'Tracker not registered'], Response::HTTP_NOT_FOUND);
         }
         $logger->error('Tracker information received without the correct Autorization Header ', ['Authorization' => $request->headers->get('Authorization')]);
