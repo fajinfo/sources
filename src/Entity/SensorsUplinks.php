@@ -43,6 +43,12 @@ class SensorsUplinks
      */
     private $type;
 
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $fromSensorDate;
+
     public function __toString()
     {
         return $this->getDate()->format('d/m/Y H:i');
@@ -110,6 +116,14 @@ class SensorsUplinks
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getFromSensorDate()
+    {
+        return $this->fromSensorDate;
+    }
+
+    /**
      * @param $fPort
      * @param $bytes
      * @return array
@@ -120,6 +134,34 @@ class SensorsUplinks
         switch($fPort){
             case 2:
                 $this->type = "Water Flow Value";
+
+                $flag = 2;
+
+                $pulse = hexdec($hex[1].$hex[2].$hex[3].$hex[4]);
+
+                if($hex[5] == 1){
+                    $log['fromLastUplinkPulse'] = $pulse;
+                    $log['Mode'] = 1;
+                } else {
+                    $log['fromStartPulse'] = $pulse;
+                    $log['Mode'] = 0;
+                }
+
+                if($flag == 2) {
+                    $this->setWaterFlowRate(($pulse/60)/20);
+                } elseif($flag == 1) {
+                    $this->setWaterFlowRate(($pulse/360)/20);
+                } else {
+                    $this->setWaterFlowRate(($pulse / 450) / 20);
+                }
+
+                $date = new \DateTime();
+                $date->setTimestamp(hexdec($hex[7].$hex[8].$hex[9].$hex[10]));
+
+               /* $flag=(bytes[0]&0xFC)>>2;
+
+                decode.Alarm=(bytes[0]&0x02)?"TRUE":"FALSE";*/
+
                 break;
             case 3:
                 $this->type = "Historical Water Flow";
@@ -187,34 +229,7 @@ class SensorsUplinks
         }
 
 
-        /*if($fPort==0x02)
-        {
-            $flag=(bytes[0]&0xFC)>>2;
-            $decode = [];
-
-            decode.MOD=bytes[5];
-            decode.Calculate_flag=flag;
-            decode.Alarm=(bytes[0]&0x02)?"TRUE":"FALSE";
-
-            if(flag==2)
-                decode.Water_flow_value=parseFloat((((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0)/60).toFixed(1));
-            else if(flag==1)
-                decode.Water_flow_value=parseFloat((((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0)/360).toFixed(1));
-            else
-                decode.Water_flow_value=parseFloat((((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0)/450).toFixed(1));
-
-            if(bytes[5]==0x01)
-                decode.Last_pulse=((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0);
-            else
-                decode.Total_pulse=((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0);
-
-            decode.Data_time= getMyDate((bytes[7]<<24 | bytes[8]<<16 | bytes[9]<<8 | bytes[10]).toString(10));
-
-            if(bytes.length==11)
-            {
-                return decode;
-            }
-            }
+        /*
                 else if(fPort==0x03)
                 {
                     for(var i=0;i<bytes.length;i=i+11)
