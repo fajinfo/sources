@@ -26,6 +26,7 @@ class SensorUplinkController extends AbstractController
     {
         if($request->headers->get('Authorization') === 'oHAwmnQLI89B8WgPq4tC8MyQbKEOD1fR'){
             $data = json_decode($request->getContent(), true);
+            $logger->debug('Received new tracker info', $data);
             $sensor = $repository->findOneBy(['devEui' => bin2hex(base64_decode($data['DevEUI_uplink']['DevEUI']))]);
 
             if($sensor instanceof Sensors){
