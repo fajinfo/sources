@@ -106,12 +106,12 @@ class Sensors
     public function getLastBatteryPercent(): ?float
     {
         $batteryV = round($this->lastBattery, 1);
-        $batteryCurve = [4.2 => 100, 4.1 => 93, 4.0 => 84, 3.9 => 75, 3.8 => 64, 3.7 => 52, 3.6 => 22, 3.5 => 9, 3.4 => 0];
-        if($batteryV > 4.2){
+        $batteryCurve = [3.5 => 100, 3.4 => 98, 3.3 => 90, 3.2 => 70];
+        if($batteryV > 3.6){
             return 101;
         }
 
-        if($batteryV < 3.4){
+        if($batteryV < 3.1){
             return 0;
         }
 
