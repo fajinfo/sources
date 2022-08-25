@@ -111,10 +111,10 @@ class SensorsUplinks
 
     public function decodePayload($fPort, $bytes) {
         $log = [];
+        $hex = str_split($bytes, 2);
         switch($fPort){
             case 2:
                 $this->type = "Water Flow Value";
-                $hex = str_split($bytes, 2);
                 break;
             case 3:
                 $this->type = "Historical Water Flow";
@@ -124,6 +124,62 @@ class SensorsUplinks
                 break;
             case 5:
                 $this->type = "Device Status";
+                if($hex[0] == 11){
+                    $log['Sensor_Type'] = 'Dragino SW3L';
+                }
+                $subVersion = str_split($hex[2], 1);
+                $log['Firmware_Version'] = 'v'.$hex[1].'.'.$subVersion[0].'.'.$subVersion[1];
+
+                switch($hex[3]){
+                    case '01':
+                        $log['Frequency_Band'] = "EU868";
+                        break;
+                    case '02':
+                        $log['Frequency_Band'] = "US915";
+                        break;
+                    case '03':
+                        $log['Frequency_Band'] = "IN865";
+                        break;
+                    case '04':
+                        $log['Frequency_Band'] = "AU915";
+                        break;
+                    case '05':
+                        $log['Frequency_Band'] = "KZ865";
+                        break;
+                    case '06':
+                        $log['Frequency_Band'] = "RU864";
+                        break;
+                    case '07':
+                        $log['Frequency_Band'] = "AS923";
+                        break;
+                    case '08':
+                        $log['Frequency_Band'] = "AS923-1";
+                    break;
+                    case '09':
+                        $log['Frequency_Band'] = "AS923-2";
+                    break;
+                    case '0A':
+                        $log['Frequency_Band'] = "AS923-3";
+                        break;
+                    case '0B':
+                        $log['Frequency_Band'] = "CN470";
+                        break;
+                    case '0C':
+                        $log['Frequency_Band'] = "EU433";
+                        break;
+                    case '0D':
+                        $log['Frequency_Band'] = "KR920";
+                        break;
+                    case '0E':
+                        $log['Frequency_Band'] = "MA869";
+                        break;
+                }
+
+                $batteryVoltage = hexdec($hex[5].$hex[6])/1000;
+                $this->setBattery($batteryVoltage);
+                $this->getSensor()->setLastBattery($batteryVoltage);
+
+
                 break;
         }
 
@@ -182,59 +238,6 @@ class SensorsUplinks
             Alarm_Timer:alarm_timer,
             };
             }
-                else if(fPort==0x05)
-                {
-                    var sub_band;
-                    var freq_band;
-                    var sensor;
-
-                    if(bytes[0]==0x11)
-                        sensor= "SW3L";
-
-                    if(bytes[4]==0xff)
-                        sub_band="NULL";
-                    else
-                        sub_band=bytes[4];
-
-                    if(bytes[3]==0x01)
-                        freq_band="EU868";
-                    else if(bytes[3]==0x02)
-                        freq_band="US915";
-                    else if(bytes[3]==0x03)
-                        freq_band="IN865";
-                    else if(bytes[3]==0x04)
-                        freq_band="AU915";
-                    else if(bytes[3]==0x05)
-                        freq_band="KZ865";
-                    else if(bytes[3]==0x06)
-                        freq_band="RU864";
-                    else if(bytes[3]==0x07)
-                        freq_band="AS923";
-                    else if(bytes[3]==0x08)
-                        freq_band="AS923_1";
-                    else if(bytes[3]==0x09)
-                        freq_band="AS923_2";
-                    else if(bytes[3]==0x0A)
-                        freq_band="AS923_3";
-                    else if(bytes[3]==0x0B)
-                        freq_band="CN470";
-                    else if(bytes[3]==0x0C)
-                        freq_band="EU433";
-                    else if(bytes[3]==0x0D)
-                        freq_band="KR920";
-                    else if(bytes[3]==0x0E)
-                        freq_band="MA869";
-
-                    var firm_ver= (bytes[1]&0x0f)+'.'+(bytes[2]>>4&0x0f)+'.'+(bytes[2]&0x0f);
-                    var bat= (bytes[5]<<8 | bytes[6])/1000;
-
-                    return {
-                    SENSOR_MODEL:sensor,
-            FIRMWARE_VERSION:firm_ver,
-            FREQUENCY_BAND:freq_band,
-            SUB_BAND:sub_band,
-            BAT:bat,
-            };
             }*/
     }
 }
