@@ -26,7 +26,6 @@ class SensorUplinkController extends AbstractController
     {
         if($request->headers->get('Authorization') === 'oHAwmnQLI89B8WgPq4tC8MyQbKEOD1fR'){
             $data = json_decode($request->getContent(), true);
-            $logger->debug('Received new tracker info', $data);
             $sensor = $repository->findOneBy(['devEui' => $data['data_raw']['DevEUI_uplink']['DevEUI']]);
 
             if($sensor instanceof Sensors){
@@ -34,10 +33,11 @@ class SensorUplinkController extends AbstractController
                 $uplink->setDate(new \DateTime($data['data_raw']['DevEUI_uplink']['Time']))
                     ->setSensor($sensor);
 
-                $uplink->decodePayload($data['data_raw']['DevEUI_uplink']['FPort'], $data['data_raw']['DevEUI_uplink']['payload_hex']);
+                $moreInfo = $uplink->decodePayload($data['data_raw']['DevEUI_uplink']['FPort'], $data['data_raw']['DevEUI_uplink']['payload_hex']);
 
-                $sensor->setLastSeen($uplink->getDate())
-                    ->setLastBattery($uplink->getBattery());
+                $logger->debug('Received tracker payload', $moreInfo);
+
+                $sensor->setLastSeen($uplink->getDate());
 
                 $em->persist($uplink);
                 $em->persist($sensor);
@@ -77,7 +77,7 @@ class SensorUplinkController extends AbstractController
          * Si nous sommes le premier jour du mois, on archive les jours manquants de 28 à 31 puis on archive le même mois de l'an dernier dans la base "DailyFlow"
          */
         $working_date = new \DateTime();
-        if($working_date->format('d') == 22 /* TODO : Set this value to 1*/) {
+        if($working_date->format('d') == 1) {
             $working_date->modify('-1 day');
             $lastMonthNbDay = $working_date->format('t');
             $working_date->modify('-1 month');

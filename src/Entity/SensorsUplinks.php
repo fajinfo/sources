@@ -109,6 +109,11 @@ class SensorsUplinks
         return $this->type;
     }
 
+    /**
+     * @param $fPort
+     * @param $bytes
+     * @return array
+     */
     public function decodePayload($fPort, $bytes) {
         $log = [];
         $hex = str_split($bytes, 2);
@@ -178,8 +183,6 @@ class SensorsUplinks
                 $batteryVoltage = hexdec($hex[5].$hex[6])/1000;
                 $this->setBattery($batteryVoltage);
                 $this->getSensor()->setLastBattery($batteryVoltage);
-
-
                 break;
         }
 
@@ -239,5 +242,6 @@ class SensorsUplinks
             };
             }
             }*/
+        return $log;
     }
 }
