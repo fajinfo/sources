@@ -22,7 +22,7 @@ class SensorUplinkController extends AbstractController
     /**
      * @Route("/api/sensor/uplink", name="sensor_uplink")
      */
-    public function index(Request $request, SensorsRepository $repository, LoggerInterface $logger): Response
+    public function index(Request $request, SensorsRepository $repository, LoggerInterface $logger, EntityManagerInterface $em): Response
     {
         if($request->headers->get('Authorization') === 'oHAwmnQLI89B8WgPq4tC8MyQbKEOD1fR'){
             $data = json_decode($request->getContent(), true);
@@ -39,7 +39,6 @@ class SensorUplinkController extends AbstractController
                 $sensor->setLastSeen($uplink->getDate())
                     ->setLastBattery($uplink->getBattery());
 
-                $em = $this->getDoctrine()->getManager();
                 $em->persist($uplink);
                 $em->persist($sensor);
                 $em->flush();
