@@ -157,8 +157,9 @@ class SensorsUplinks
                 } else {
                     $log['fromStartPulse'] = $pulse;
                     $this->type .= " From Start";
+                    $originalPulse = $pulse;
                     $pulse -= $this->getSensor()->getLastFlowPulse();
-                    $this->getSensor()->setLastFlowPulse($pulse);
+                    $this->getSensor()->setLastFlowPulse($originalPulse);
                     $log['Mode'] = 0;
                 }
 
