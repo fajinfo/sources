@@ -139,22 +139,32 @@ class SensorsUplinks
 
                 $pulse = hexdec($hex[1].$hex[2].$hex[3].$hex[4]);
 
+                if($this->getSensor()->getLastSeen() instanceof \DateTime) {
+                    $interval = $this->getSensor()->getLastFlowTime()->diff(new \DateTime())->format('i');
+                } else {
+                    $interval = 20;
+                }
+                $this->getSensor()->setLastFlowTime(new \DateTime());
+
                 if($hex[5] == 1){
                     $log['fromLastUplinkPulse'] = $pulse;
                     $this->type .= " From Last Uplink";
+                    $this->getSensor()->setLastFlowPulse($this->getSensor()->getLastFlowPulse()+$pulse);
                     $log['Mode'] = 1;
                 } else {
                     $log['fromStartPulse'] = $pulse;
                     $this->type .= " From Start";
+                    $pulse -= $this->getSensor()->getLastFlowPulse();
+                    $this->getSensor()->setLastFlowPulse($pulse);
                     $log['Mode'] = 0;
                 }
 
                 if($flag == 2) {
-                    $this->setWaterFlowRate(($pulse/60)/20);
+                    $this->setWaterFlowRate(($pulse/60)/$interval);
                 } elseif($flag == 1) {
-                    $this->setWaterFlowRate(($pulse/360)/20);
+                    $this->setWaterFlowRate(($pulse/360)/$interval);
                 } else {
-                    $this->setWaterFlowRate(($pulse / 450) / 20);
+                    $this->setWaterFlowRate(($pulse/450) / $interval);
                 }
 
                 $date = new \DateTime();

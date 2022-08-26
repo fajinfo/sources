@@ -35,6 +35,18 @@ class Sensors
     private $lastSeen;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastFlowTime;
+
+    /**
+     * @var int
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $lastFlowPulse;
+
+    /**
      * @ORM\Column(type="float", nullable=true)
      */
     private $lastBattery;
@@ -154,5 +166,37 @@ class Sensors
         }
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastFlowTime(): ?\DateTime
+    {
+        return $this->lastFlowTime;
+    }
+
+    /**
+     * @param ?\DateTime $lastFlowTime
+     */
+    public function setLastFlowTime(\DateTime $lastFlowTime=null): void
+    {
+        $this->lastFlowTime = $lastFlowTime;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastFlowPulse(): ?int
+    {
+        return $this->lastFlowPulse;
+    }
+
+    /**
+     * @param ?int $lastFlowPulse
+     */
+    public function setLastFlowPulse(int $lastFlowPulse = null): void
+    {
+        $this->lastFlowPulse = $lastFlowPulse;
     }
 }
