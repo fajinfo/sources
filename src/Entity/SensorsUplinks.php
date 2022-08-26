@@ -140,7 +140,7 @@ class SensorsUplinks
                 $pulse = hexdec($hex[1].$hex[2].$hex[3].$hex[4]);
 
                 if($this->getSensor()->getLastSeen() instanceof \DateTime) {
-                    $interval = $this->getSensor()->getLastFlowTime()->diff(new \DateTime())->format('i');
+                    $interval = (int)$this->getSensor()->getLastFlowTime()->diff(new \DateTime())->format('i');
                 } else {
                     $interval = 20;
                 }
