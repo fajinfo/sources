@@ -131,6 +131,8 @@ class SensorsUplinks
     public function decodePayload($fPort, $bytes) {
         $log = [];
         $hex = str_split($bytes, 2);
+        $now = new \DateTime();
+        $this->getSensor()->setLastSeen($now);
         switch($fPort){
             case 2:
                 $this->type = "Water Flow Value";
@@ -139,12 +141,12 @@ class SensorsUplinks
 
                 $pulse = hexdec($hex[1].$hex[2].$hex[3].$hex[4]);
 
-                if($this->getSensor()->getLastSeen() instanceof \DateTime) {
-                    $interval = $this->getSensor()->getLastFlowTime()->diff(new \DateTime())->i;
+                if($this->getSensor()->getLastFlowTime() instanceof \DateTime) {
+                    $interval = $this->getSensor()->getLastFlowTime()->diff($now)->i;
                 } else {
                     $interval = 20;
                 }
-                $this->getSensor()->setLastFlowTime(new \DateTime());
+                $this->getSensor()->setLastFlowTime($now);
 
                 if($hex[5] == 1){
                     $log['fromLastUplinkPulse'] = $pulse;
@@ -160,9 +162,9 @@ class SensorsUplinks
                 }
 
                 if($flag == 2) {
-                    $this->setWaterFlowRate(($pulse/60)/$interval);
+                    $this->setWaterFlowRate(($pulse/60) / $interval);
                 } elseif($flag == 1) {
-                    $this->setWaterFlowRate(($pulse/360)/$interval);
+                    $this->setWaterFlowRate(($pulse/360)/ $interval);
                 } else {
                     $this->setWaterFlowRate(($pulse/450) / $interval);
                 }

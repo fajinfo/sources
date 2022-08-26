@@ -37,8 +37,6 @@ class SensorUplinkController extends AbstractController
 
                 $logger->debug('Received tracker payload', $moreInfo);
 
-                $sensor->setLastSeen($uplink->getDate());
-
                 $em->persist($uplink);
                 $em->persist($sensor);
                 $em->flush();
