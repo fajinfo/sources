@@ -143,7 +143,7 @@ class SensorsUplinks
 
                 if($this->getSensor()->getLastFlowTime() instanceof \DateTime) {
                     $diff = $this->getSensor()->getLastFlowTime()->diff($now);
-                    $interval = $diff->i;
+                    $interval = ($diff->h * 60)+$diff->i;
                 } else {
                     $interval = 20;
                 }
