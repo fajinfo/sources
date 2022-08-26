@@ -114,12 +114,11 @@
                 })
             </script>
         </div>
-            {% else %}
-                <div class="col-md-6 col-sm-12">
-                    <h3>{% trans %}No sensor connected{% endtrans %}</h3>
-                </div>
-            {% endif %}
-    </div>
+        {% else %}
+            <div class="col-md-6 col-sm-12">
+                <h3>{% trans %}No sensor connected{% endtrans %}</h3>
+            </div>
+        {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

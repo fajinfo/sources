@@ -141,9 +141,11 @@ class SensorsUplinks
 
                 if($hex[5] == 1){
                     $log['fromLastUplinkPulse'] = $pulse;
+                    $this->type .= " From Last Uplink";
                     $log['Mode'] = 1;
                 } else {
                     $log['fromStartPulse'] = $pulse;
+                    $this->type .= " From Start";
                     $log['Mode'] = 0;
                 }
 
