@@ -18,7 +18,7 @@
                             {% trans %}Dernière actualisation{% endtrans %}
                         </li>
                         <li class="list-group-item">
-                            <span class="badge">{% if source.sensor.first %}{{ source.sensor.first.lastBatteryPercent }}{% endif %}</span>
+                            <span class="badge">{% if source.sensor.first %}{{ source.sensor.first.lastBatteryPercent|format_percent_number }}{% endif %}</span>
                             {% trans %}Etat actuel de la batterie{% endtrans %}
                         </li>
                         <li class="list-group-item">
@@ -39,12 +39,12 @@
                         data: {
                             responsive: true,
                             labels: [{% for up in source.sensor.first.uplinks %}'{{ up.date|date('d/m/Y H:i') }}', {% endfor %}],
-                            datasets: [{
+                            datasets: [{# {
                                 label: '{% trans %}Battery Voltage{% endtrans %}',
                                 data: [{% for up in source.sensor.first.uplinks %}'{{ up.battery }}', {% endfor %}],
                                 backgroundColor: 'rgb(255, 99, 132)',
                                 borderColor: 'rgb(255, 99, 132)',
-                            },{
+                            },#}{
                                 label: '{% trans %}Flow Rate{% endtrans %}',
                                 data: [{% for up in source.sensor.first.uplinks %}'{{ up.waterFlowRate }}', {% endfor %}],
                                 backgroundColor: 'rgb(54, 162, 235)',
