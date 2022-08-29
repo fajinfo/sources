@@ -38,7 +38,7 @@
                         type: 'line',
                         data: {
                             responsive: true,
-                            labels: [{% for up in source.sensor.first.uplinks %}'{{ up.date|date('d/m/Y H:i') }}', {% endfor %}],
+                            labels: [{% for up in source.sensor.first.uplinks %}{% if up.waterFlowRate %}'{{ up.date|date('d/m/Y H:i') }}', {% endif %}{% endfor %}],
                             datasets: [{# {
                                 label: '{% trans %}Battery Voltage{% endtrans %}',
                                 data: [{% for up in source.sensor.first.uplinks %}'{{ up.battery }}', {% endfor %}],
@@ -46,7 +46,7 @@
                                 borderColor: 'rgb(255, 99, 132)',
                             },#}{
                                 label: '{% trans %}Flow Rate{% endtrans %}',
-                                data: [{% for up in source.sensor.first.uplinks %}'{{ up.waterFlowRate }}', {% endfor %}],
+                                data: [{% for up in source.sensor.first.uplinks %}{% if up.waterFlowRate %}'{{ up.waterFlowRate }}', {% endif %}{% endfor %}],
                                 backgroundColor: 'rgb(54, 162, 235)',
                                 borderColor: 'rgb(54, 162, 235)',
                             }, ]
