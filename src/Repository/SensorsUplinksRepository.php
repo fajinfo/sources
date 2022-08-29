@@ -39,6 +39,7 @@ class SensorsUplinksRepository extends ServiceEntityRepository
             ->select('MAX(u.waterFlowRate) AS max_flow, MIN(u.waterFlowRate) AS min_flow, AVG(u.waterFlowRate) AS avg_flow')
             ->andWhere('s.source = :se')
             ->setParameter('se', $source)
+            ->andWhere('u.waterFlowRate IS NOT NULL')
             ->andWhere('u.date BETWEEN :from AND :to')
             ->setParameter('from', $dateDebut)
             ->setParameter('to', $dateFin);
